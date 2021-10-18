@@ -1,39 +1,56 @@
 <template>
-  <div id="app">
+  <body>
+    
+    <main id="app">
+      <div class="unpurchased-container">
+        <ul>
+          <li
+            v-for="(item, index) in items"
+            :key="index"
+            :class="item.isPurchased ? 'purchased' : 'not-purchased'"
+          >
+            <span>{{ item.name }}</span>
+            <span v-if="item.isPurchased">Purchased ✅ </span>
+            <button v-if="!item.isPurchased" v-on:click="buyItem(index)">
+              Purchase
+            </button>
+          </li>
+        </ul>
+      </div>
 
-    <div class="unpurchased-container">
-      <ul>
-        <li v-for="(item, index) in items" :key="index" :class="item.isPurchased ? 'purchased' : 'not-purchased'"> 
-          <span>{{item.name}}</span>
-          <span v-if="item.isPurchased">Purchased ✅ </span>
-          <button v-if="!item.isPurchased" v-on:click="buyItem(index)">Purchase</button>
-        </li>
-      </ul>
-    </div>
+      <div class="form-container">
+        <form v-on:submit.prevent="saveNewItem">
+          <label for="new-item">Add a new item:</label>
+          <input type="text" id="new-item" v-model="newItem" />
+          <input type="submit" value="Save New Item" />
+        </form>
+      </div>
 
-    <form v-on:submit.prevent="saveNewItem">
-      <label for="new-item">Add a new item:</label>
-      <input type="text" id="new-item" v-model="newItem">
-      <input type="submit" value="Save New Item">
-    </form>
+      <div class="purchased-container">
+        <ul>
+          <li
+            v-for="(item, index) in purchasedItems"
+            :key="index"
+            class="purchased-list"
+          >
+            <span>{{ item.name }}</span>
+            <span v-if="item.isPurchased">Purchased ✅</span>
+          </li>
+        </ul>
+      </div>
+    </main>
 
-    <ul>
-      <li v-for="(item, index) in items" :key="index" v-if="item.isPurchased" class="purchased-list">
-        <span>{{item.name}}</span>
-        <span v-if="item.isPurchased">Purchased ✅</span>
-      </li>
-    </ul>
-  </div>
+  </body>
 </template>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
       items: [
         {
           name: "milk",
-          isPurchased: false
+          isPurchased: false,
         },
         {
           name: "cheese",
@@ -41,91 +58,32 @@ export default {
         },
         {
           name: "beans",
-          isPurchased: false
-        }
-        ],
+          isPurchased: false,
+        },
+      ],
       newItem: "",
-    }
+      purchasedItems: []
+    };
   },
   methods: {
-    saveNewItem: function() {
+    saveNewItem: function () {
       if (this.newItem.trim()) {
         this.items.push({
           name: this.newItem,
-          isPurchased: false
-        })
-        this.newItem = ""
+          isPurchased: false,
+        });
+        this.newItem = "";
       }
     },
-    buyItem: function(index) {
-      this.items[index].isPurchased = true;
-    }
-  }
-}
+    buyItem: function (index) {
+      let item = this.items[index]
+      item.isPurchased = true;
+      this.purchasedItems.push(item)
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  width: 60%;
-  margin: 0 auto;
-  font-family: 'Lato', sans-serif;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-li {
-  margin: 20px 0;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-li span {
-  padding: 8px;
-}
-
-li button {
-  background: #f2360c;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
-li.purchased {
-  display: none;
-}
-
-li.purchased-list {
-  border: 2px solid #1a681e;
-  color: #ffffff;
-  background-color: #1a681e;
-}
-
-li.not-purchased {
-  border: 2px solid #f2360c;
-}
-
-input[type="text"] {
-  padding: 10px;
-  width: 50%;
-  margin:5px;
-}
-
-button, input[type="submit"]{
-  padding: 10px;
-  background: #000;
-  color: #fff;
-  cursor: pointer;
-  border: 1px solid #000;
-}
-
-.unpurchased-container {
-  height: 300px;
-}
-
+@import "../styles/styles.scss";
 </style>
