@@ -1,19 +1,28 @@
 <template>
   <div id="app">
 
-    <ul>
-      <li v-for="(item, index) in items" :key="index" :class="item.isPurchased ? 'purchased' : 'not-purchased'"> 
-        <span>{{item.name}}</span>
-        <span v-if="item.isPurchased">Purchased ✅ </span>
-        <button v-if="!item.isPurchased" v-on:click="buyItem(index)">Purchase</button>
-      </li>
-    </ul>
+    <div class="unpurchased-container">
+      <ul>
+        <li v-for="(item, index) in items" :key="index" :class="item.isPurchased ? 'purchased' : 'not-purchased'"> 
+          <span>{{item.name}}</span>
+          <span v-if="item.isPurchased">Purchased ✅ </span>
+          <button v-if="!item.isPurchased" v-on:click="buyItem(index)">Purchase</button>
+        </li>
+      </ul>
+    </div>
 
     <form v-on:submit.prevent="saveNewItem">
       <label for="new-item">Add a new item:</label>
       <input type="text" id="new-item" v-model="newItem">
       <input type="submit" value="Save New Item">
     </form>
+
+    <ul>
+      <li v-for="(item, index) in items" :key="index" v-if="item.isPurchased" class="purchased-list">
+        <span>{{item.name}}</span>
+        <span v-if="item.isPurchased">Purchased ✅</span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -88,6 +97,10 @@ li button {
 }
 
 li.purchased {
+  display: none;
+}
+
+li.purchased-list {
   border: 2px solid #1a681e;
   color: #ffffff;
   background-color: #1a681e;
@@ -109,6 +122,10 @@ button, input[type="submit"]{
   color: #fff;
   cursor: pointer;
   border: 1px solid #000;
+}
+
+.unpurchased-container {
+  height: 300px;
 }
 
 </style>
